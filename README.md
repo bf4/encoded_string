@@ -2,7 +2,7 @@
 
 EncodedString is a wrapper for a string and a given encoding that handles operations on
 strings with different encodings, invalid encodings, have no known conversion method,
-or are otherwise incompatible, all without raising excpetions
+or are otherwise incompatible, all without raising exceptions
 
 ## Installation
 
@@ -22,10 +22,16 @@ Or install it yourself as:
 
 ## Usage
 
+Pick compatible encoding for two strings, if any:
+
 ```ruby
 EncodedString.pick_encoding(str1, str2)
+```
 
-string = "123".force_encoding(EncodedString::UTF_8)
+Wrap a string and make it safely accomodate the target encoding:
+
+```ruby
+string = "123".force_encoding(Encoding::UTF_8)
 str = "abc".encode('ASCII-8BIT')
 str = EncodedString.new(str, target_encoding = string.encoding)
 str.source_encoding.to_s
