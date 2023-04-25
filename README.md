@@ -40,6 +40,33 @@ str << "123"
 str.to_s
 ```
 
+## TL;DR
+
+For a most cases, you can just use a function like:
+
+```ruby
+    def scrub_invalid_bytes(string, encoding: Encoding::UTF_8)
+      return nil if string.nil?
+      replace = "?"
+      string = string.scrub(replace)
+      string.encode(encoding)
+    rescue Encoding::UndefinedConversionError, Encoding::InvalidByteSequenceError
+      encode_unconvertable_bytes =  {
+        :invalid => :replace,
+        :undef   => :replace,
+        :replace => replace
+      }
+      string.encode(encoding, encode_unconvertable_bytes)
+    rescue Encoding::ConverterNotFoundError
+      encode_no_converter = {
+        :invalid => :replace,
+        :replace => replace
+      }
+
+      string.dup.force_encoding(encoding).encode(encode_no_converter)
+    end
+```
+
 ## About
 
 Encoding Exceptions:
